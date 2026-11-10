@@ -1,0 +1,33 @@
+{% extends "panel/base.html" %}
+
+{% block contenido %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="mb-1">Iniciar sesión</h4>
+                <p class="text-muted small">Acceso exclusivo para el personal de Music Pro.</p>
+                {% if form.errors %}
+                    <div class="alert alert-danger py-2">Usuario o contraseña incorrectos, o la cuenta está desactivada.</div>
+                {% endif %}
+                {% if request.GET.next %}
+                    <div class="alert alert-warning py-2">Debes iniciar sesión para ver esa página.</div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label" for="id_username">Usuario</label>
+                        <input type="text" name="username" id="id_username" class="form-control" autofocus required autocomplete="username">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="id_password">Contraseña</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required autocomplete="current-password">
+                    </div>
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button type="submit" class="btn btn-danger w-100">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

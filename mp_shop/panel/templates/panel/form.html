@@ -1,0 +1,77 @@
+{% extends "panel/base.html" %}
+
+{% block contenido %}
+<h3 class="mb-3">{{ titulo_pagina }}</h3>
+<form method="post" class="card shadow-sm"><div class="card-body">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="row g-3">
+    {% for campo in form %}
+        <div class="col-md-6">
+            {% if campo.field.widget.input_type == "checkbox" %}
+                <div class="form-check mt-4">{{ campo }} <label class="form-check-label" for="{{ campo.id_for_label }}">{{ campo.label }}</label></div>
+            {% else %}
+                <label class="form-label" for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+                {{ campo }}
+            {% endif %}
+            {% if campo.help_text %}<div class="form-text">{{ campo.help_text }}</div>{% endif %}
+            {% for error in campo.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+
+    {% if formset %}
+        <hr>
+        <h5>{{ titulo_formset }}</h5>
+        {{ formset.management_form }}
+        {% if formset.non_form_errors %}<div class="alert alert-danger py-2">{{ formset.non_form_errors }}</div>{% endif %}
+        <table class="table table-sm align-middle">
+            <thead><tr>
+                {% for campo in formset.forms.0.visible_fields %}<th>{{ campo.label }}</th>{% endfor %}
+            </tr></thead>
+            <tbody id="filas-formset">
+            {% for f in formset %}
+                <tr>
+                    {% for campo in f.visible_fields %}
+                        <td>
+                            {% if campo.field.widget.input_type == "checkbox" %}
+                                {{ campo }} <span class="small text-muted">Quitar</span>
+                            {% else %}{{ campo }}{% endif %}
+                            {% for error in campo.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </td>
+                    {% endfor %}
+                    {% for oculto in f.hidden_fields %}{{ oculto }}{% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" id="agregar-fila" class="btn btn-sm btn-outline-dark">+ Agregar fila</button>
+        <span class="small text-muted ms-2">Marca «Quitar» para eliminar una fila existente.</span>
+
+        {# Molde de una fila vacía: el botón lo copia y le asigna el número de fila. #}
+        <template id="molde-fila">
+            <tr>
+                {% for campo in formset.empty_form.visible_fields %}
+                    <td>{% if campo.field.widget.input_type == "checkbox" %}{{ campo }} <span class="small text-muted">Quitar</span>{% else %}{{ campo }}{% endif %}</td>
+                {% endfor %}
+                {% for oculto in formset.empty_form.hidden_fields %}{{ oculto }}{% endfor %}
+            </tr>
+        </template>
+        <script>
+            document.getElementById("agregar-fila").addEventListener("click", function () {
+                const total = document.getElementById("id_{{ formset.prefix }}-TOTAL_FORMS");
+                const numero = parseInt(total.value, 10);
+                const fila = document.getElementById("molde-fila").innerHTML.replaceAll("__prefix__", numero);
+                document.getElementById("filas-formset").insertAdjacentHTML("beforeend", fila);
+                total.value = numero + 1;
+            });
+        </script>
+    {% endif %}
+
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Guardar</button>
+        <a href="{% url url_lista %}" class="btn btn-outline-secondary">Cancelar</a>
+        {% if enlace_extra %}<a class="btn btn-outline-primary ms-auto" href="{% url enlace_extra.0 enlace_extra.1 %}">{{ enlace_extra.2 }}</a>{% endif %}
+    </div>
+</div></form>
+{% endblock %}

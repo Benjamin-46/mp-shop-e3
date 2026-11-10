@@ -1,0 +1,63 @@
+{% extends "panel/base.html" %}
+{% load humanize panel_extras %}
+
+{% block contenido %}
+<a href="{% url 'panel:reportes' %}" class="btn btn-link px-0">&larr; Todos los reportes</a>
+<h4><span class="badge bg-dark">{{ definicion.numero }}</span> {{ definicion.nivel }}</h4>
+<p class="lead">{{ definicion.pregunta }}</p>
+
+{% for e in errores %}<div class="alert alert-danger py-2">{{ e }}</div>{% endfor %}
+
+{% if parametros %}
+<form method="get" class="row g-2 align-items-end mb-4 card card-body shadow-sm flex-row">
+    {% for p in parametros %}
+        <div class="col-md-3">
+            <label class="form-label" for="p_{{ p.nombre }}">{{ p.etiqueta }}</label>
+            {% if p.tipo == "categoria" %}
+                <select class="form-select" name="categoria" id="p_categoria" required>
+                    <option value="">Selecciona...</option>
+                    {% for c in categorias %}<option value="{{ c.pk }}" {% if crudos.categoria == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.nombre }}</option>{% endfor %}
+                </select>
+            {% elif p.tipo == "fecha" %}
+                <input type="date" class="form-control" name="{{ p.nombre }}" id="p_{{ p.nombre }}" value="{{ crudos|dictget:p.nombre }}" required>
+            {% elif p.tipo == "entero" or p.tipo == "anio" %}
+                <input type="number" class="form-control" name="{{ p.nombre }}" id="p_{{ p.nombre }}" value="{{ crudos|dictget:p.nombre }}" required>
+            {% else %}
+                <input type="text" class="form-control" name="{{ p.nombre }}" id="p_{{ p.nombre }}" value="{{ crudos|dictget:p.nombre }}" placeholder="12.345.678-5" required>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <div class="col-auto"><button type="submit" class="btn btn-danger">Ejecutar reporte</button></div>
+</form>
+{% endif %}
+
+{% if ejecutado %}
+    {% if resumen %}<div class="alert alert-info py-2">{{ resumen }}</div>{% endif %}
+    <div class="table-responsive">
+    <table class="table table-striped bg-white">
+        <thead class="table-dark"><tr>{% for nombre, tipo in columnas %}<th>{{ nombre }}</th>{% endfor %}</tr></thead>
+        <tbody>
+        {% for fila in pagina %}
+            <tr>
+            {% for celda in fila %}
+                {% with col=columnas|indice:forloop.counter0 %}<td>{{ celda|formato:col.1 }}</td>{% endwith %}
+            {% endfor %}
+            </tr>
+        {% empty %}
+            <tr><td colspan="{{ columnas|length }}" class="text-muted">La consulta no devolvió resultados.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <nav><ul class="pagination">
+        {% if pagina.has_previous %}<li class="page-item"><a class="page-link" href="?{% if qs %}{{ qs }}&{% endif %}page={{ pagina.previous_page_number }}">&laquo;</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }} ({{ pagina.paginator.count|intcomma }} filas)</span></li>
+        {% if pagina.has_next %}<li class="page-item"><a class="page-link" href="?{% if qs %}{{ qs }}&{% endif %}page={{ pagina.next_page_number }}">&raquo;</a></li>{% endif %}
+    </ul></nav>
+{% endif %}
+
+<details class="mt-4">
+    <summary class="fw-bold">Ver la consulta ORM utilizada</summary>
+    <pre class="bg-dark text-light p-3 rounded mt-2"><code>{{ codigo }}</code></pre>
+</details>
+{% endblock %}

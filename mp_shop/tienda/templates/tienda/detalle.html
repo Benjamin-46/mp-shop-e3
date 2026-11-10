@@ -1,0 +1,36 @@
+{% extends "tienda/base.html" %}
+{% load humanize %}
+
+{% block contenido %}
+<a href="{% url 'tienda:catalogo' %}" class="btn btn-link mb-3">&larr; Volver al catálogo</a>
+
+<div class="row">
+    <div class="col-md-5">
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen }}" class="img-fluid rounded shadow-sm" alt="{{ producto.nombre }}">
+        {% endif %}
+    </div>
+    <div class="col-md-7">
+        <h2>{{ producto.nombre }}</h2>
+        <p class="text-muted">{{ producto.categoria.nombre }} &middot; {{ producto.marca.nombre }} &middot; SKU {{ producto.sku }}</p>
+        <h3 class="text-danger">${{ producto.precio|intcomma }}</h3>
+        <p>{{ producto.descripcion|default:"Sin descripción disponible." }}</p>
+
+        {% if sin_stock %}
+            <div class="alert alert-warning">Este producto está agotado por el momento.</div>
+        {% else %}
+            <p><strong>Stock total:</strong> {{ stock_total }} unidades</p>
+            <ul class="list-group mb-3">
+                {% for inv in inventarios %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ inv.sucursal.nombre }} <span class="badge bg-dark">{{ inv.stock }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button class="btn btn-danger" disabled title="Funcionalidad de compra disponible en fases posteriores">
+                Agregar al carrito
+            </button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

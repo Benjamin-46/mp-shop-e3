@@ -1,0 +1,43 @@
+{% extends "tienda/base.html" %}
+{% load humanize %}
+
+{% block contenido %}
+<div class="p-5 mb-4 bg-dark text-white rounded-3">
+    <div class="container-fluid py-3">
+        <h1 class="display-6 fw-bold">MP Shop</h1>
+        <p class="col-md-8 fs-5">
+            Vitrina digital de Music Pro Company: instrumentos musicales y equipos de
+            audio profesional, disponibles para nuestras sucursales y clientes.
+        </p>
+        {% if total_productos > 0 %}
+            <p class="fs-6">Actualmente contamos con {{ total_productos|intcomma }} productos publicados.</p>
+        {% else %}
+            <p class="fs-6">Aún no hay productos cargados en el catálogo.</p>
+        {% endif %}
+        <a href="{% url 'tienda:catalogo' %}" class="btn btn-danger btn-lg mt-2">Ver catálogo</a>
+    </div>
+</div>
+
+{% if destacados %}
+    <h4 class="mb-3">Productos destacados</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for producto in destacados %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen }}" class="card-img-top" style="height:160px; object-fit:cover;" alt="{{ producto.nombre }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ producto.nombre }}</h6>
+                        <p class="text-muted mb-1">{{ producto.categoria.nombre }} &middot; {{ producto.marca.nombre }}</p>
+                        <p class="fw-bold mb-0">${{ producto.precio|intcomma }}</p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a href="{% url 'tienda:detalle_producto' producto.id %}" class="btn btn-outline-danger w-100">Ver detalle</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

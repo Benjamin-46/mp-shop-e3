@@ -1,0 +1,8 @@
+{% extends "panel/base.html" %}
+{% block contenido %}
+<div class="text-center mt-5">
+    <h1 class="display-4">403</h1>
+    <p class="lead">No tienes permiso para ver esta página.</p>
+    <a href="{% url 'panel:inicio' %}" class="btn btn-dark">Volver al panel</a>
+</div>
+{% endblock %}

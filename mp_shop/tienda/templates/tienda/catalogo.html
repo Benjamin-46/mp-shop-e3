@@ -1,0 +1,68 @@
+{% extends "tienda/base.html" %}
+{% load humanize %}
+
+{% block contenido %}
+<h2 class="mb-4">Catálogo de productos</h2>
+
+<form method="get" class="row g-2 mb-3">
+    {% if categoria_seleccionada %}<input type="hidden" name="categoria" value="{{ categoria_seleccionada }}">{% endif %}
+    <div class="col-md-6">
+        <input type="search" name="q" value="{{ busqueda }}" class="form-control" placeholder="Buscar por nombre o SKU">
+    </div>
+    <div class="col-auto"><button class="btn btn-dark" type="submit">Buscar</button></div>
+</form>
+
+<div class="mb-4">
+    <a href="{% url 'tienda:catalogo' %}"
+       class="btn btn-sm {% if not categoria_seleccionada %}btn-dark{% else %}btn-outline-dark{% endif %}">
+        Todas
+    </a>
+    {% for categoria in categorias %}
+        <a href="{% url 'tienda:catalogo' %}?categoria={{ categoria|urlencode }}"
+           class="btn btn-sm {% if categoria_seleccionada == categoria %}btn-dark{% else %}btn-outline-dark{% endif %}">
+            {{ categoria }}
+        </a>
+    {% endfor %}
+</div>
+
+{% if pagina.object_list %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for producto in pagina %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen }}" class="card-img-top" style="height:180px; object-fit:cover;" alt="{{ producto.nombre }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text text-muted">{{ producto.categoria.nombre }} &middot; {{ producto.marca.nombre }}</p>
+                        <p class="fw-bold">${{ producto.precio|intcomma }}</p>
+                        {% if producto.stock_total_db %}
+                            <span class="badge bg-success">Stock: {{ producto.stock_total_db }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Sin stock</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a href="{% url 'tienda:detalle_producto' producto.id %}" class="btn btn-outline-danger w-100">Ver detalle</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <nav class="mt-4" aria-label="Paginación">
+        <ul class="pagination justify-content-center">
+            {% if pagina.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ pagina.previous_page_number }}{% if categoria_seleccionada %}&categoria={{ categoria_seleccionada|urlencode }}{% endif %}{% if busqueda %}&q={{ busqueda|urlencode }}{% endif %}">&laquo; Anterior</a></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">Página {{ pagina.number }} de {{ pagina.paginator.num_pages|intcomma }}</span></li>
+            {% if pagina.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ pagina.next_page_number }}{% if categoria_seleccionada %}&categoria={{ categoria_seleccionada|urlencode }}{% endif %}{% if busqueda %}&q={{ busqueda|urlencode }}{% endif %}">Siguiente &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% else %}
+    <p class="text-muted">No hay productos que coincidan con la búsqueda.</p>
+{% endif %}
+{% endblock %}

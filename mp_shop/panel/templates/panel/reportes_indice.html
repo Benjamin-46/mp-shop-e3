@@ -1,0 +1,16 @@
+{% extends "panel/base.html" %}
+
+{% block contenido %}
+<h3 class="mb-1">Reportes de consultas ORM</h3>
+<p class="text-muted">Proyecto Tienda: 20 consultas resueltas únicamente con el ORM de Django.</p>
+{% for nivel, lista in niveles.items %}
+    <h5 class="mt-4">{{ nivel }}</h5>
+    <div class="list-group">
+        {% for r in lista %}
+            <a class="list-group-item list-group-item-action" href="{% url 'panel:reporte' r.numero %}">
+                <span class="badge bg-dark me-2">{{ r.numero }}</span>{{ r.pregunta }}
+            </a>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endblock %}

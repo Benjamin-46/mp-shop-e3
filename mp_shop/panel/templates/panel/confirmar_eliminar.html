@@ -1,0 +1,15 @@
+{% extends "panel/base.html" %}
+
+{% block contenido %}
+<div class="card shadow-sm col-md-6"><div class="card-body">
+    <h4>{{ titulo_pagina }}</h4>
+    <p class="mb-1">¿Seguro que quieres eliminar <strong>{{ objeto }}</strong>?</p>
+    {% if aviso %}<p class="text-muted small">{{ aviso }}</p>{% endif %}
+    <p class="text-danger small">Esta acción no se puede deshacer.</p>
+    <form method="post" class="d-flex gap-2">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url url_lista %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div></div>
+{% endblock %}

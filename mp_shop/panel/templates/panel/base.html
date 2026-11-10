@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Shop Panel | {{ titulo_pagina }}</title>
+    <link href="{% static 'vendor/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        .sidebar { min-height: calc(100vh - 56px); background:#1c1f23; }
+        .sidebar .nav-link { color:#c9ced3; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color:#fff; background:#2d3238; border-radius:.4rem; }
+        .sidebar .titulo { color:#7d8590; font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark" style="background-color:#111;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{% url 'panel:inicio' %}">MP Shop &middot; Panel</a>
+        <div class="d-flex align-items-center gap-3 text-white">
+            <a class="link-light small" href="{% url 'tienda:home' %}" target="_blank">Ver tienda</a>
+            {% if user.is_authenticated %}
+                <span class="small">{{ user.get_full_name|default:user.username }}
+                    {% if user.is_staff %}<span class="badge bg-danger">Admin</span>{% endif %}</span>
+                {# Django exige POST para cerrar sesión (protegido con token CSRF). #}
+                <form method="post" action="{% url 'panel:logout' %}" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-light">Cerrar sesión</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        {% if user.is_authenticated %}
+        <aside class="col-md-2 sidebar p-3">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:inicio' %}">Inicio</a></li>
+                <li class="titulo mt-3 mb-1">Catálogo</li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:producto_lista' %}">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:categoria_lista' %}">Categorías</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:marca_lista' %}">Marcas</a></li>
+                <li class="titulo mt-3 mb-1">Comercial</li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:cliente_lista' %}">Clientes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:venta_lista' %}">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:sucursal_lista' %}">Sucursales</a></li>
+                <li class="titulo mt-3 mb-1">Análisis</li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:reportes' %}">Reportes ORM</a></li>
+                {% if user.is_staff %}
+                <li class="titulo mt-3 mb-1">Sistema</li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'panel:usuario_lista' %}">Usuarios</a></li>
+                {% endif %}
+            </ul>
+        </aside>
+        {% endif %}
+        <main class="{% if user.is_authenticated %}col-md-10{% else %}col-12{% endif %} p-4">
+            {% for mensaje in messages %}
+                <div class="alert {% if mensaje.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">{{ mensaje }}</div>
+            {% endfor %}
+            {% block contenido %}{% endblock %}
+        </main>
+    </div>
+</div>
+</body>
+</html>

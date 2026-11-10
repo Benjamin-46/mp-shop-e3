@@ -1,0 +1,4 @@
+Django>=6.1,<6.2
+mysqlclient>=2.2.1
+django-widget-tweaks>=1.5
+Faker>=40.0

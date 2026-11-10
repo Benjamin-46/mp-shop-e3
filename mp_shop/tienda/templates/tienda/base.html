@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load widget_tweaks static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Pro | {{ titulo_pagina }}</title>
+    <link href="{% static 'vendor/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#111;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'tienda:home' %}">MP Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tienda:home' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tienda:catalogo' %}">Catálogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'panel:inicio' %}">Panel administrativo</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    {% if messages %}
+        {% for mensaje in messages %}
+            <div class="alert {% if mensaje.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                {{ mensaje }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block contenido %}{% endblock %}
+</div>
+
+<footer class="text-center text-muted py-4">
+    Music Pro Company &mdash; Prototipo académico INACAP (Evaluación 3, Programación Backend)
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

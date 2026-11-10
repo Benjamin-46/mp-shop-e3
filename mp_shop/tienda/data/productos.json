@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "nombre": "Guitarra Eléctrica SG Roja",
+    "categoria": "Guitarras",
+    "precio": 289990,
+    "stock": 6,
+    "descripcion": "Guitarra eléctrica tipo SG, cuerpo en caoba y pastillas humbucker, ideal para rock y metal.",
+    "imagen": "https://images.unsplash.com/photo-1550985616-10810253b84d?w=600"
+  },
+  {
+    "id": 2,
+    "nombre": "Bajo Eléctrico 4 Cuerdas",
+    "categoria": "Bajos",
+    "precio": 259990,
+    "stock": 4,
+    "descripcion": "Bajo eléctrico de 4 cuerdas, mástil de arce, sonido cálido para múltiples géneros musicales.",
+    "imagen": "https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?w=600"
+  },
+  {
+    "id": 3,
+    "nombre": "Batería Electrónica Compacta",
+    "categoria": "Baterías",
+    "precio": 349990,
+    "stock": 3,
+    "descripcion": "Set de batería electrónica con módulo de sonidos, ideal para práctica silenciosa.",
+    "imagen": "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=600"
+  },
+  {
+    "id": 4,
+    "nombre": "Ukelele Concert Natural",
+    "categoria": "Cuerdas",
+    "precio": 45990,
+    "stock": 15,
+    "descripcion": "Ukelele tamaño concert, madera de caoba, uno de los productos más vendidos post pandemia.",
+    "imagen": "https://images.unsplash.com/photo-1621368286550-f54551f39b91?w=600"
+  },
+  {
+    "id": 5,
+    "nombre": "Amplificador de Guitarra 40W",
+    "categoria": "Amplificadores",
+    "precio": 119990,
+    "stock": 8,
+    "descripcion": "Amplificador combo de 40W con canal limpio y distorsión, entrada auxiliar y salida de audífonos.",
+    "imagen": "https://images.unsplash.com/photo-1558098329-a11cff621064?w=600"
+  },
+  {
+    "id": 6,
+    "nombre": "Audífonos de Estudio Profesionales",
+    "categoria": "Accesorios",
+    "precio": 39990,
+    "stock": 20,
+    "descripcion": "Audífonos cerrados de referencia para monitoreo en estudio y mezcla.",
+    "imagen": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600"
+  },
+  {
+    "id": 7,
+    "nombre": "Controlador DJ 2 Canales",
+    "categoria": "DJ",
+    "precio": 199990,
+    "stock": 5,
+    "descripcion": "Controlador de DJ compacto de 2 canales con jog wheels y software de mezcla incluido.",
+    "imagen": "https://images.unsplash.com/photo-1571266752264-7a1fb2b3a1f4?w=600"
+  },
+  {
+    "id": 8,
+    "nombre": "Set de Cuerdas para Guitarra Acústica",
+    "categoria": "Accesorios",
+    "precio": 8990,
+    "stock": 40,
+    "descripcion": "Set completo de cuerdas de bronce para guitarra acústica, calibre 12.",
+    "imagen": "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=600"
+  }
+]

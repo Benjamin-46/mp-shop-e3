@@ -1,0 +1,31 @@
+{% extends "panel/base.html" %}
+{% load humanize panel_extras %}
+
+{% block contenido %}
+<h3 class="mb-4">Panel administrativo</h3>
+<div class="row g-3 mb-4">
+    {% for nombre, total, destino in totales %}
+        <div class="col-md-3">
+            <a href="{% url destino %}" class="text-decoration-none">
+                <div class="card shadow-sm h-100"><div class="card-body">
+                    <div class="text-muted small">{{ nombre }}</div>
+                    <div class="fs-3 fw-bold text-dark">{{ total|intcomma }}</div>
+                </div></div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+<h5>Últimas ventas</h5>
+<table class="table table-sm table-striped bg-white">
+    <thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th>Sucursal</th><th>Estado</th><th class="text-end">Total</th></tr></thead>
+    <tbody>
+    {% for v in ultimas_ventas %}
+        <tr><td>{{ v.id }}</td><td>{{ v.fecha|date:"d-m-Y H:i" }}</td><td>{{ v.cliente.nombre }}</td>
+            <td>{{ v.sucursal.nombre }}</td><td>{{ v.get_estado_display }}</td><td class="text-end">${{ v.total|intcomma }}</td></tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-muted">Aún no hay ventas registradas.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
